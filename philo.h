@@ -1,5 +1,4 @@
 
-
 #ifndef PHILO_H
 #define PHILO_H
 
@@ -23,8 +22,8 @@ typedef struct t_currentphilo
 
 typedef struct t_philo
 {
-    pthread_t *thread_id;
     s_currentphilo *current_phil;
+    pthread_t thread_id;
     long int begin_time;
     int curr_phil;
     pthread_mutex_t *forks;
@@ -40,6 +39,11 @@ typedef struct t_philo
 
 }               s_philo;
 
+typedef struct t_data{
+  s_philo *philo;
+  s_currentphilo info;
+}              s_data;
+
 //MAIN
 void *init_threads(s_philo *philo, char **av);
 void *routine_func(void *arg);
@@ -48,6 +52,7 @@ long int ft_timenow(void);
 void ft_usleep(float time);
 void *destroy_mutex(s_philo *philo);
 void *init_mutex(s_philo *philo);
+void print_activity(int id, char *activity, s_philo *philo);
 
 
 //EATING

@@ -17,27 +17,16 @@ void *eating_routine(s_philo *philo)
 
 void *sleeping_routine(s_philo *philo)
 {
-  pthread_mutex_t lock;
-  pthread_mutex_init(&lock, NULL);
-  gettimeofday(&philo->current_time, NULL);
-  pthread_mutex_lock(&lock);
-  if(ft_timenow() - philo->begin_time >= 0 && (ft_timenow() - philo->begin_time) <= INT_MAX)
-    printf("%ldms %d is sleeping\n", ft_timenow() - philo->begin_time, philo->id);
-  pthread_mutex_unlock(&lock);
-  pthread_mutex_unlock(&lock);
+  
+  print_activity(philo->id, "is sleeping", philo);
+
   ft_usleep(philo->time_to_sleep);
   return (NULL);
 }
 
 void *thinking_routine(s_philo *philo)
 {
-  pthread_mutex_t lock;
-  pthread_mutex_init(&lock, NULL);
-  pthread_mutex_lock(&lock);
-  if(ft_timenow() - philo->begin_time >= 0 && (ft_timenow() - philo->begin_time) <= INT_MAX)
-    printf("%ldms %d is thinking\n", ft_timenow() - philo->begin_time, philo->id);
-  pthread_mutex_unlock(&lock);
-  pthread_mutex_unlock(&lock);
+  print_activity(philo->id, "is thinking", philo);
+  
   return (NULL);
 }
-

@@ -1,25 +1,14 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   utlis.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: itchinda <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/10 13:45:43 by itchinda          #+#    #+#             */
-/*   Updated: 2023/04/10 13:45:44 by itchinda         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "philo.h"
 
 
 void ft_usleep(float time)
 {
   long int begin;
+  (void)begin;
 
   begin = ft_timenow();
-  while (ft_timenow() - begin < time)
-    usleep(time / 10);
+  //while (ft_timenow() - begin < time)
+  usleep(time);
 }
 
 long int ft_timenow(void)
