@@ -9,7 +9,6 @@ s_philo *init_threads(char **av, int ac)
   i = 0;
   nbofphilos = ft_atoi(av[1]);
   philo = (s_philo *)malloc(sizeof(s_philo) * nbofphilos);
-  philo->is_dead = 0;
   philo->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * nbofphilos);
   while (i < nbofphilos)
   {
@@ -28,6 +27,7 @@ s_philo *init_threads(char **av, int ac)
     philo[i].forks = philo->forks;
     philo[i].id = i;
     philo[i].numphilos = nbofphilos;
+    philo[i].is_dead = 0;
     i++;
   }
   return (philo);

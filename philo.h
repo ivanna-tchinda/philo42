@@ -23,6 +23,7 @@ typedef struct t_philo
 {
     s_currentphilo *current_phil;
     pthread_t thread_id;
+    pthread_t monitor;
     long int begin_time;
     long int eat_time;
     int curr_phil;
@@ -56,7 +57,8 @@ void print_activity(int id, char *activity, s_philo *philo);
 void free_philo(s_philo *philo);
 void check_all_ate(s_philo *philo, int eat);
 void *end_routine(s_philo *philo);
-int check_death(s_philo philo);
+void *check_death(s_philo *philo, int i);
+void *supervisor(void *arg;);
 
 
 //EATING
