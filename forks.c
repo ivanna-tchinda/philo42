@@ -32,7 +32,7 @@ void *taking_forks2(s_philo *philo)
     pthread_mutex_destroy(&philo->forks[philo->id]);
     ft_usleep(philo->time_to_die);
     print_activity(philo->id, "died 💀", philo);
-    exit(0);
+    //end_routine(philo);
   }
   while(pthread_mutex_lock(&philo->forks[(philo->id + philo->numphilos - 1) % (philo->numphilos)]) != 0)
     ft_usleep(1);

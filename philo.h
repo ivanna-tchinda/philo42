@@ -31,9 +31,9 @@ typedef struct t_philo
     int numphilos;
     int is_dead;
     int id;
-    float time_to_die;
-    float time_to_eat;
-    float time_to_sleep;
+    int time_to_die;
+    int time_to_eat;
+    int time_to_sleep;
     int many_times_to_eat;
     struct timeval current_time;
 
@@ -45,16 +45,18 @@ typedef struct t_data{
 }              s_data;
 
 //MAIN
-void *init_threads(s_philo *philo, char **av);
+s_philo *init_threads(char **av, int ac);
 void *routine_func(void *arg);
 void *start_routine(s_philo *philo);
 long int ft_timenow(void);
-void ft_usleep(float time);
+void ft_usleep(int time);
 void *destroy_mutex(s_philo *philo);
 void *init_mutex(s_philo *philo);
 void print_activity(int id, char *activity, s_philo *philo);
 void free_philo(s_philo *philo);
 void check_all_ate(s_philo *philo, int eat);
+void *end_routine(s_philo *philo);
+int check_death(s_philo philo);
 
 
 //EATING
@@ -74,7 +76,7 @@ void *thinking(void *ptr);
 void *thinking_routine(s_philo *philo);
 
 // UTILS
-int	ft_atoi(const char *nptr);
+int	ft_atoi(char *nptr);
 void	*ft_calloc(size_t nmemb, size_t size);
 
 #endif

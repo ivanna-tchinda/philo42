@@ -28,10 +28,9 @@ void *routine_func(void *arg)
     thinking_routine(&philo);
     if(check_death(philo) != 0)
     {
-      exit(0);
+      //end_routine(&philo);
       break;
     }
-    pthread_detach(philo.thread_id);
     check_all_ate(&philo, philo.many_times_to_eat);
   }
   return (NULL);
@@ -45,11 +44,11 @@ void *start_routine(s_philo *philo)
   {
     if(pthread_create(&philo[i].thread_id, NULL, &routine_func, &philo[i]) != 0)
     {
-      exit(write(1, "failed to create\n", 14));
+      //end_routine(philo);
+      write(1, "failed to create\n", 14);
       return (NULL);
     }
     i++;
-    // create threads for each philo with routine func
   }
   return (NULL);
 }
@@ -63,7 +62,7 @@ void *end_routine(s_philo *philo)
   {
     if(pthread_join(philo[i].thread_id, NULL) != 0)
     {
-      exit(write(1, "failed to join\n", 15));
+      write(1, "failed to join\n", 15);
       return(NULL);
     }
     i++;
@@ -87,18 +86,18 @@ void check_all_ate(s_philo *philo, int eat)
     i++;
   }
   printf("All philosophers ate.\n");
-  exit(0);
+  //end_routine(philo);
 }
 
 int main(int ac, char **av)
 {
   if (ac < 5 || ac > 6)
     return (write(1, "Invalid number of arguments\n", 28));
-  s_philo philo;
-  init_threads(&philo, av);
-  start_routine(&philo);
-  end_routine(&philo);
-  destroy_mutex(&philo);
-  free_philo(&philo);
+  s_philo *philo;
+  philo = init_threads(av, ac);
+  start_routine(philo);
+  end_routine(philo);
+  //destroy_mutex(philo);
+  //free_philo(philo);
   return (0);
 }

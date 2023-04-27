@@ -1,9 +1,9 @@
 #include "philo.h"
 
 
-void ft_usleep(float time)
+void ft_usleep(int time)
 {
-  long int begin;
+  long begin;
 
   begin = ft_timenow();
   while (ft_timenow() - begin < time)
@@ -18,7 +18,7 @@ long int ft_timenow(void)
   return (current_time.tv_sec * 1000 + current_time.tv_usec / 1000);
 }
 
-int	ft_atoi(const char *nptr)
+int	ft_atoi(char *nptr)
 {
 	int	i;
 	int	value;
@@ -27,6 +27,8 @@ int	ft_atoi(const char *nptr)
 	i = 0;
 	value = 0;
 	sign = 1;
+	if(!nptr)
+		return(write(1, "char for ft_atoi is null\n", 25));
 	while ((nptr[i] >= 7 && nptr[i] <= 13) || nptr[i] == ' ' || &nptr[i] == 0)
 		i++;
 	if (nptr[i] == '-')
