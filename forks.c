@@ -24,15 +24,26 @@ void *taking_forks2(s_philo *philo)
   while(pthread_mutex_lock(&philo->forks[philo->id]) != 0)
     ft_usleep(1);
   
-  print_activity(philo->id, "has taken a fork", philo);
+  print_activity(philo->id, "has taken a fork 🍴", philo);
   
+  if(philo->numphilos == 1)
+  {
+    pthread_mutex_unlock(&philo->forks[philo->id]);
+    pthread_mutex_destroy(&philo->forks[philo->id]);
+    ft_usleep(philo->time_to_die);
+    print_activity(philo->id, "died 💀", philo);
+    exit(0);
+  }
   while(pthread_mutex_lock(&philo->forks[(philo->id + philo->numphilos - 1) % (philo->numphilos)]) != 0)
     ft_usleep(1);
     
   
-  print_activity(philo->id, "has taken a fork", philo);
+  print_activity(philo->id, "has taken a fork 🍴", philo);
 
-  print_activity(philo->id, "is eating", philo);
+  print_activity(philo->id, "is eating 🍚", philo);
+  philo->many_times_to_eat -= 1;
+
+  philo->eat_time = ft_timenow();
 
   ft_usleep(philo->time_to_eat);
   release_forks2(philo);
@@ -51,15 +62,17 @@ void *taking_forks(s_philo *philo)
   while(pthread_mutex_lock(&philo->forks[philo->id]) != 0)
     ft_usleep(1);
   
-  print_activity(philo->id, "has taken a fork", philo);
-  
+  print_activity(philo->id, "has taken a fork 🍴", philo);
   while(pthread_mutex_lock(&philo->forks[(philo->id + philo->numphilos - 1) % (philo->numphilos)]) != 0)
     ft_usleep(1);
   
   
-  print_activity(philo->id, "has taken a fork", philo);
+  print_activity(philo->id, "has taken a fork 🍴", philo);
 
-  print_activity(philo->id, "is eating", philo);
+  print_activity(philo->id, "is eating 🍚", philo);
+  philo->many_times_to_eat -= 1;
+
+  philo->eat_time = ft_timenow();
   
   ft_usleep(philo->time_to_eat);
 

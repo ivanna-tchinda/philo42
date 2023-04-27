@@ -14,8 +14,7 @@
 
 typedef struct t_currentphilo
 {
-    int id;
-    float before_dying;
+    int is_dead;
     struct t_philo *data;
 
 }               s_currentphilo;
@@ -25,6 +24,7 @@ typedef struct t_philo
     s_currentphilo *current_phil;
     pthread_t thread_id;
     long int begin_time;
+    long int eat_time;
     int curr_phil;
     pthread_mutex_t *forks;
     pthread_mutex_t lock;
@@ -53,6 +53,8 @@ void ft_usleep(float time);
 void *destroy_mutex(s_philo *philo);
 void *init_mutex(s_philo *philo);
 void print_activity(int id, char *activity, s_philo *philo);
+void free_philo(s_philo *philo);
+void check_all_ate(s_philo *philo, int eat);
 
 
 //EATING

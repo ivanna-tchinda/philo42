@@ -4,11 +4,10 @@
 void ft_usleep(float time)
 {
   long int begin;
-  (void)begin;
 
   begin = ft_timenow();
-  //while (ft_timenow() - begin < time)
-  usleep(time);
+  while (ft_timenow() - begin < time)
+  	usleep(time / 10);
 }
 
 long int ft_timenow(void)
