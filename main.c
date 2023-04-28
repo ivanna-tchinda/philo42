@@ -17,19 +17,24 @@ void *supervisor(void *arg)
 {
   s_philo *philo = (s_philo *)arg;
   long int time;
-  time = ft_timenow();
   int i;
   i = 0;
-  while(i < philo->numphilos)
+  while(philo[i].is_dead == 0)
   {
-    if (time - philo[i].eat_time >= philo[i].time_to_die)
-    {
-      check_death(philo, i);
-      printf("superv: id %d is %ddead\n", philo[i].id, philo[i].is_dead);
-      return(NULL);
+      i = 0;
+      while(i < philo->numphilos)
+      {
+        time = ft_timenow();
+        printf("%ld-%ld  >= %d\n", time, philo[i].eat_time, philo[i].time_to_die);
+        if (time - philo[i].eat_time >= philo[i].time_to_die)
+        {
+          check_death(philo, i);
+          break;
+        }
+        i++;
     }
-    i++;
   }
+  
   return(NULL);
 }
 
@@ -42,13 +47,12 @@ void *routine_func(void *arg)
     ft_usleep(philo.time_to_eat);
   while ((&philo)->is_dead == 0 && philo.many_times_to_eat != 0)
   {
-    printf("routine: id %d is %ddead\n", philo.id, philo.is_dead);
     if(philo.is_dead == 0)
       eating_routine(&philo);
     if(philo.is_dead == 0)
-    sleeping_routine(&philo);
+      sleeping_routine(&philo);
     if(philo.is_dead == 0)
-    thinking_routine(&philo);
+      thinking_routine(&philo);
     check_all_ate(&philo, philo.many_times_to_eat);
   }
   return (NULL);
@@ -57,12 +61,15 @@ void *routine_func(void *arg)
 
 void *start_routine(s_philo *philo)
 {
+  pthread_t monitor;
+  pthread_t *thread_id;
   int i = 0;
   int status = 0;
   (void)status;
+  thread_id = malloc(sizeof(pthread_t) * philo->numphilos);
   while (i < philo->numphilos)
   {
-    if(pthread_create(&philo[i].thread_id, NULL, &routine_func, &philo[i]) != 0)
+    if(pthread_create(&thread_id[i], NULL, &routine_func, &philo[i]) != 0)
     {
       //end_routine(philo);
       status = write(1, "failed to create\n", 14);
@@ -70,9 +77,11 @@ void *start_routine(s_philo *philo)
     }
     i++;
   }
-  pthread_create(&philo->monitor, NULL, &supervisor, philo);
-  if(pthread_join(philo->monitor, NULL) != 0)
-    printf("failed to join\n");
+  pthread_create(&monitor, NULL, &supervisor, philo);
+  pthread_join(monitor, NULL);
+  i = -1;
+  while(++i < philo->numphilos)
+    philo[i].thread_id = thread_id[i];
   return (NULL);
 }
 
@@ -85,11 +94,11 @@ void *end_routine(s_philo *philo)
   i = 0;
   while (i < philo->numphilos)
   {
-    if(pthread_join(philo[i].thread_id, NULL) != 0)
-    {
-      status = write(1, "failed to join\n", 15);
-      return(NULL);
-    }
+    // if(pthread_join(philo[i].thread_id, NULL) != 0)
+    // {
+    //   status = write(1, "failed to join\n", 15);
+    //   return(NULL);
+    // }
     i++;
   }
   return (NULL);
