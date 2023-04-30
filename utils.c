@@ -1,5 +1,28 @@
 #include "philo.h"
 
+int check_nb_meals(t_philo *philo)
+{
+  int i;
+
+  i = 0;
+  while(i < philo->nbphilos)
+  {
+    if(philo->nb_of_meals > 0)
+    {
+      return 0;
+    }
+    i++;
+  } 
+  printf("All philos have eaten\n");
+  return(1);
+}
+
+void print_action(t_data *data, int id, char *str)
+{
+  pthread_mutex_lock(&data->print);
+  printf("%lldms %d %s\n", ft_timenow() - data->start, id, str);
+  pthread_mutex_unlock(&data->print);
+}
 
 void ft_usleep(int time)
 {
@@ -15,59 +38,5 @@ long int ft_timenow(void)
   struct timeval current_time;
 
   gettimeofday(&current_time, NULL);
-  return (current_time.tv_sec * 1000 + current_time.tv_usec / 1000);
-}
-
-int	ft_atoi(char *nptr)
-{
-	int	i;
-	int	value;
-	int	sign;
-
-	i = 0;
-	value = 0;
-	sign = 1;
-	if(!nptr)
-		return(write(1, "char for ft_atoi is null\n", 25));
-	while ((nptr[i] >= 7 && nptr[i] <= 13) || nptr[i] == ' ' || &nptr[i] == 0)
-		i++;
-	if (nptr[i] == '-')
-		sign *= -1;
-	while (nptr[i] == '+' || nptr[i] == '-')
-	{
-		if (nptr[i] == '-' && (nptr[i + 1] == '+' || nptr[i + 1] == '-'))
-			return (0);
-		else if (nptr[i] == '+' && (nptr[i + 1] == '-' || nptr[i + 1] == '+'))
-			return (0);
-		i++;
-	}
-	while (nptr[i] >= '0' && nptr[i] <= '9')
-	{
-		value = value * 10 + nptr[i] - '0';
-		i++;
-	}
-	return (value * sign);
-}
-
-void	*ft_calloc(size_t nmemb, size_t size)
-{
-	char	*str;
-	size_t	i;
-	size_t	total;
-
-	i = 0;
-	total = nmemb * size;
-	if (nmemb == 0 || size == 0)
-		return (malloc(0));
-	if (size && nmemb / SIZE_MAX > size)
-		return (NULL);
-	str = (void *)malloc(total);
-	if (!str)
-		return (NULL);
-	while (i < total)
-	{
-		str[i] = 0;
-		i++;
-	}
-	return (str);
+  return ((size_t)current_time.tv_sec * 1000 +(size_t)current_time.tv_usec / 1000);
 }
