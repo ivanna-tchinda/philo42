@@ -68,8 +68,10 @@ void thinking(t_philo *philo);
 
 //UTILS
 void print_action(t_data *data, int id, char *str);
-void ft_usleep(int time);
+void ft_usleep(int time, t_philo *philo);
 long int ft_timenow(void);
 int check_nb_meals(t_philo *philo);
 
+//FREE
+void destroy_free(t_data *data);
 #endif

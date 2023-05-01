@@ -3,33 +3,35 @@
 int check_nb_meals(t_philo *philo)
 {
   int i;
+  t_data *data;
 
+  data = philo->data;
   i = 0;
   while(i < philo->nbphilos)
   {
-    if(philo->nb_of_meals > 0)
+    if(philo[i].nb_of_meals > 0)
     {
       return 0;
     }
     i++;
   } 
-  printf("All philos have eaten\n");
+  pthread_mutex_lock(&data->print);
+  printf("All philos have eaten 🥳\n");
+  pthread_mutex_unlock(&data->print);
   return(1);
 }
 
 void print_action(t_data *data, int id, char *str)
 {
-  pthread_mutex_lock(&data->print);
-  printf("%lldms %d %s\n", ft_timenow() - data->start, id, str);
-  pthread_mutex_unlock(&data->print);
+	printf("%lldms %d %s\n", ft_timenow() - data->start, id, str);
 }
 
-void ft_usleep(int time)
+void ft_usleep(int time, t_philo *philo)
 {
   long begin;
 
   begin = ft_timenow();
-  while (ft_timenow() - begin < time)
+  while (ft_timenow() - begin < time && philo->is_dead == 0)
   	usleep(time / 10);
 }
 
