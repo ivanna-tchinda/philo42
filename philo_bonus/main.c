@@ -28,18 +28,16 @@ int ft_parse(int ac, char **av)
   return(0);
 }
 
-int main(int ac, char **av) 
+int main(int ac, char **av)
 {
-  if(ft_parse(ac, av) == 1)
-    return(1);
-  t_data data;
-  init_data(&data, ac, av);
-  init_philo(&data);
-  init_sem(&data);
-  //start_check_eating(&data);
-  start_routine(&data);
-  //kill_process(&data);
-  destroy_free(&data);
-  exit(0);
-  return 0;
+    if(ft_parse(ac, av) == 1)
+        return(1);
+    t_data data;
+    init_data(&data, ac, av);
+    init_philo(&data);
+    init_mutex(&data);
+    //meal_check(&data);
+    start_routine(&data);
+    kill_process(&data);
+    return(0);
 }

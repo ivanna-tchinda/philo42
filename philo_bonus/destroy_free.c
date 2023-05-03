@@ -1,8 +1,13 @@
 #include "philo_bonus.h"
 
-void destroy_free(t_data *data)
+void kill_process(t_data *data)
 {
-  sem_close(data->forks);
-  sem_close(data->print);
-  sem_close(data->lock);
+    int i;
+
+    i = 0;
+    while(i < data->nbphilos)
+    {
+        kill(data->pid[i] , SIGKILL);
+        i++;
+    }
 }

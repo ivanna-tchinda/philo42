@@ -5,7 +5,7 @@ SRC=	  main.c\
 			routine.c\
 			init.c\
 			activity.c\
-			destroy_free.c\
+			destroy_free.c
 			
 
 CC= cc -g3

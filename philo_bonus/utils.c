@@ -1,40 +1,20 @@
 #include "philo_bonus.h"
 
-void *check_nb_meals(void *arg)
+void print_activity(t_data *data, int id, char *str)
 {
-  t_data *data;
-
-  data = (t_data *)arg;
-  int i;
-  i = 0;
-  sem_post(data->print);
-  while(i < data->nbphilos)
-  {
-    sem_wait(data->print);
-    //sem_wait(data->eat);
-    sem_post(data->print);
-    i++;
-  }
-  printf("All philos have eaten 🥳\n");
-  exit(0);
-  return(NULL);
+    printf("%lldms %d %s\n", ft_timenow() - data->start, id, str);
 }
 
-void print_action(t_data *data, int id, char *str)
+void ft_usleep(int time)
 {
-	printf("%lldms %d %s\n", ft_timenow() - data->start, id, str);
-}
-
-void ft_usleep(int time, t_philo *philo)
-{
-  long begin;
+  long long begin;
 
   begin = ft_timenow();
-  while (ft_timenow() - begin < time && philo->is_dead == 0)
+  while (ft_timenow() - begin < time)
   	usleep(time / 10);
 }
 
-long int ft_timenow(void)
+long ft_timenow(void)
 {
   struct timeval current_time;
 

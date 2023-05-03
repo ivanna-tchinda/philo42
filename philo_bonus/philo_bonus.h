@@ -1,5 +1,5 @@
-#ifndef PHILO_BONUS_H
-#define PHILO_BONUS_H
+#ifndef PHILO_H
+#define PHILO_H
 
 #include <pthread.h>
 #include <stdlib.h>
@@ -17,67 +17,71 @@
 struct s_data;
 
 typedef struct s_philo{
-  int id;
-  int is_dead;
-  int time_to_eat;
-  int time_to_die;
-  int time_to_sleep;
-  unsigned long nb_of_meals;
-  long long time_last_meal;
-  int left_fork;
-  int right_fork;
-  int nbphilos;
-  long long start_time;
-  struct s_data *data;
-}              t_philo;
+    //INFOS
+    int id;
+    int time_to_die;
+    int time_to_eat;
+    int time_to_sleep;
+    int time_of_last_meal;
+    int nb_of_meals;
+
+    //T_DATA
+
+    //THREADS
+    pthread_t philo_id;
+
+}               t_philo;
 
 typedef struct s_data{
+    //THREADS
+    pthread_t is_dead;
 
-  t_philo *philo;
-  int nbphilos;
-  int time_to_eat;
-  int time_to_die;
-  int time_to_sleep;
-  unsigned long nb_of_meals;
-  int is_dead;
-  pthread_t tid;
-  long long start;
-  sem_t *forks;
-  sem_t *print;
-  sem_t *lock;
-  sem_t *death;
-  sem_t *eat;
-  int *pid;
-}              t_data;
+    //INFOS
+    int nbphilos;
+    time_t time_to_die;
+    time_t time_to_eat;
+    time_t time_to_sleep;
+    int nb_of_meals;
+    int dead_id;
+    int philo_id;
+    long long start;
 
-//PARSING
-int ft_parse(int ac, char **av);
+    //MUTEX
+    sem_t *forks;
+    sem_t *death;
+    sem_t *nbmeals;
+    sem_t *print;
+    sem_t *stop;
+
+    //PROCESS
+    pid_t *pid;
+
+    //PHILOS
+    t_philo philo;
+}               t_data;
 
 //INIT
 void init_data(t_data *data, int ac, char **av);
+void init_mutex(t_data *data);
 void init_philo(t_data *data);
-void init_sem(t_data *data);
-
-//UTILS
-void *check_nb_meals(void *arg);
-void print_action(t_data *data, int id, char *str);
-void ft_usleep(int time, t_philo *philo);
-long int ft_timenow(void);
 
 //ROUTINE
+void meal_check(t_data *data);
+void *check_death(void *args);
+void *philos_are_full(void *arg);
 void start_routine(t_data *data);
-void *supervisor(void *args);
-void death_philo(t_philo *philo, int i);
-void start_check_eating(t_data *data);
-
-//DESTROY&FREE
-void destroy_free(t_data *data);
-void kill_process(t_data *data);
+void routine(void *arg);
 
 //ACTIVITY
-void eating(t_philo *philo);
-void release_forks(t_data *data);
-void sleeping(t_philo *philo);
-void thinking(t_philo *philo);
+void eating(t_data *data);
+void sleep_think(t_data *data);
+
+//UTILS
+void print_activity(t_data *data, int id, char *str);
+void ft_usleep(int ms);
+long int ft_timenow(void);
+
+//DESTROY FREE
+void kill_process(t_data *data);
 
 #endif
