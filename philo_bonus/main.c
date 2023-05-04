@@ -30,14 +30,12 @@ int ft_parse(int ac, char **av)
 
 int main(int ac, char **av)
 {
-    if(ft_parse(ac, av) == 1)
-        return(1);
-    t_data data;
-    init_data(&data, ac, av);
-    init_philo(&data);
-    init_mutex(&data);
-    //meal_check(&data);
-    start_routine(&data);
-    kill_process(&data);
-    return(0);
+  if(ft_parse(ac, av) == 1)
+    return(1);
+  t_data data;
+  init_data(&data, ac, av);
+  init_semaphores(&data);
+  start_routine(&data);
+  kill_process(&data);
+  return(0);
 }

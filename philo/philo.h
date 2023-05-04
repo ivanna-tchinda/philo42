@@ -59,6 +59,7 @@ void *supervisor(void *args);
 //ACTIONS
 void taking_forks(t_philo *philo);
 void taking_forks2(t_philo *philo);
+void death_philo(t_philo *philo, int i);
 void eating(t_philo *philo);
 void eating_else(t_philo *philo);
 void release_forks(t_philo *philo);

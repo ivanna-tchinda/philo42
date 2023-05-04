@@ -7,7 +7,7 @@ void kill_process(t_data *data)
     i = 0;
     while(i < data->nbphilos)
     {
-        kill(data->pid[i] , SIGKILL);
+        kill(data->philo_id[i] , SIGKILL);
         i++;
     }
 }

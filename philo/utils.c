@@ -42,3 +42,27 @@ long int ft_timenow(void)
   gettimeofday(&current_time, NULL);
   return ((size_t)current_time.tv_sec * 1000 +(size_t)current_time.tv_usec / 1000);
 }
+
+void	free_tab(char **tab)
+{
+	int	i;
+
+	i = 0;
+	while (tab[i])
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+}
+{
+	int	i;
+
+	i = 0;
+	while (tab[i])
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+}

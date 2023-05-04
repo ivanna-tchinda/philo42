@@ -29,18 +29,21 @@ void eating(t_philo *philo)
   {
     pthread_mutex_lock(&data->forks[philo->left_fork]);
     pthread_mutex_lock(&data->print);
-    if(philo->is_dead == 0)
-      print_action(data, philo->id, "has taken a fork 🍴");
+    print_action(data, philo->id, "has taken a fork 🥄");
 	  pthread_mutex_unlock(&data->print);
+
+
     pthread_mutex_lock(&data->forks[philo->right_fork]);
     pthread_mutex_lock(&data->print);
-    if(philo->is_dead == 0)
-      print_action(data, philo->id, "has taken a fork 🍴");
+    print_action(data, philo->id, "has taken a fork 🥄");
 	  pthread_mutex_unlock(&data->print);
+
+
 	  pthread_mutex_lock(&data->print);
-    if(philo->is_dead == 0)
-      print_action(data, philo->id, "is eating 🍚");
+    print_action(data, philo->id, "is eating 🍚");
 	  pthread_mutex_unlock(&data->print);
+
+    
     philo->time_last_meal = ft_timenow();
     pthread_mutex_lock(&data->lock);
     philo->nb_of_meals -= 1;
@@ -58,17 +61,23 @@ void eating_else(t_philo *philo)
   t_data *data;
 
   data = philo->data;
-  if(data->is_dead == 1)
-    return;
-  pthread_mutex_lock(&data->forks[philo->right_fork]);
+  if(philo->is_dead == 0)
+    pthread_mutex_lock(&data->forks[philo->right_fork]);
+
   pthread_mutex_lock(&data->print);
   if(philo->is_dead == 0)
-    print_action(data, philo->id, "has taken a fork 🍴");
+    print_action(data, philo->id, "has taken a fork 🥄");
 	pthread_mutex_unlock(&data->print);
+
+  if(data->nbphilos == 1)
+  {
+    pthread_mutex_unlock(&data->forks[philo->right_fork]);
+    return;
+  }
   pthread_mutex_lock(&data->forks[philo->left_fork]);
   pthread_mutex_lock(&data->print);
   if(philo->is_dead == 0)
-    print_action(data, philo->id, "has taken a fork 🍴");
+    print_action(data, philo->id, "has taken a fork 🥄");
 	pthread_mutex_unlock(&data->print);
   pthread_mutex_lock(&data->print);
   if(philo->is_dead == 0)
@@ -92,7 +101,7 @@ void sleeping(t_philo *philo)
   
   pthread_mutex_lock(&data->print);
   if(philo->is_dead == 0)
-    print_action(data, philo->id, "is sleeping");
+    print_action(data, philo->id, "is sleeping 💤");
 	pthread_mutex_unlock(&data->print);
   ft_usleep(philo->time_to_sleep, philo);
 }
@@ -105,7 +114,7 @@ void thinking(t_philo *philo)
   if(philo->is_dead == 0)
   {
 	  pthread_mutex_lock(&data->print);
-    print_action(data, philo->id, "is thinking");
+    print_action(data, philo->id, "is thinking 🧠");
 	  pthread_mutex_unlock(&data->print);
   }
 }

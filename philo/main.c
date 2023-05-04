@@ -23,7 +23,17 @@ int ft_parse(int ac, char **av)
       }
       j++;
     }
+    if(strncmp(av[i], "0", 1) == 0 && i != ac - 1)
+    {
+      printf("Enter only integers superior to 0\n");
+      return(1);
+    }
     i++;
+  }
+  if(strncmp(av[ac - 1], "0", 1) == 0)
+  {
+    printf("Philosophers don't need to eat\n");
+    return(1);
   }
   return(0);
 }
@@ -31,7 +41,7 @@ int ft_parse(int ac, char **av)
 int main(int ac, char **av)
 {
   if(ft_parse(ac, av) == 1)
-    return(1);
+    return(0);
   t_data data;
   init_data(&data, ac, av);
   init_mutex(&data);

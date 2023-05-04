@@ -8,10 +8,10 @@ void *routine_func(void *args)
   philo->start_time = ft_timenow();
   while(philo->is_dead == 0 && philo->nb_of_meals > 0)
   {
-    philo->time_last_meal = ft_timenow();
     if(philo->is_dead == 1 || philo->nb_of_meals == 0)
       break;
     eating(philo);
+    philo->time_last_meal = ft_timenow();
     if(philo->is_dead == 1 || philo->nb_of_meals == 0)
       break;
     sleeping(philo);
@@ -38,6 +38,7 @@ void death_philo(t_philo *philo, int i)
     philo[i].is_dead = 1;
     i++; 
   }
+  exit(0);
 }
 
 void *supervisor(void *args)
@@ -49,12 +50,12 @@ void *supervisor(void *args)
   philo = (t_philo *)args;
   data = philo->data;
   i = 0;
-  while(philo[i].is_dead == 0)
+  while(1)
   {
     i = 0;
     while(i < philo->nbphilos)
     {
-      if(ft_timenow() - philo[i].time_last_meal > philo[i].time_to_die)
+      if(ft_timenow() - philo[i].time_last_meal > philo[i].time_to_die || data->nbphilos == 1)
       {
         death_philo(philo, i);
         pthread_mutex_unlock(&data->print);

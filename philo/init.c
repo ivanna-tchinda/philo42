@@ -23,6 +23,9 @@ void init_philo(t_data *data)
   int i;
 
   philo = malloc(sizeof(t_philo) * data->nbphilos);
+  if(!philo)
+    return;
+  memset(philo, 0, data->nbphilos);
   i = 0;
   while (i < data->nbphilos)
   {
