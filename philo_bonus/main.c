@@ -37,5 +37,6 @@ int main(int ac, char **av)
   init_semaphores(&data);
   start_routine(&data);
   kill_process(&data);
+  exit(0);
   return(0);
 }

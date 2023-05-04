@@ -10,4 +10,5 @@ void kill_process(t_data *data)
         kill(data->philo_id[i] , SIGKILL);
         i++;
     }
+    //exit(0);
 }

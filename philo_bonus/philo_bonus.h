@@ -11,6 +11,8 @@
 # include <fcntl.h>
 # include <semaphore.h>
 # include <signal.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 # include <limits.h>
 
 struct t_data;

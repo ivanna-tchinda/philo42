@@ -28,8 +28,7 @@ void *death(void *args)
     sem_close(data->print);
     sem_close(data->forks);
     free(data->philo_id);
-    pthread_detach(data->supervisor);
-    pthread_detach(data->death_thread);
+    // kill_process(data);
     exit(0);
     return(NULL);
 }
@@ -40,8 +39,10 @@ void start_routine(t_data *data)
 
   i = 0;
   data->start = ft_timenow();
-  pthread_create(&data->death_thread, NULL, &death, data);
-  pthread_create(&data->supervisor, NULL, &supervisor, data);
+  if(pthread_create(&data->death_thread, NULL, &death, data) != 0)
+    return;
+  if(pthread_create(&data->supervisor, NULL, &supervisor, data) != 0)
+    return;
   while(i < data->nbphilos)
   {
     data->philo.id = i;
@@ -60,8 +61,10 @@ void start_routine(t_data *data)
     }
     i++;
   }
-  pthread_join(data->supervisor, NULL);
-  pthread_join(data->death_thread, NULL);
+  // pthread_join(data->death_thread, NULL);
+  // pthread_join(data->supervisor, NULL);
+  pthread_detach(data->death_thread);
+  pthread_detach(data->supervisor);
 }
 
 void routine_func(t_data *data)
