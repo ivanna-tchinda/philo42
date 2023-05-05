@@ -27,14 +27,12 @@ void init_philo(t_data *data)
 void init_data(t_data *data, int ac, char **av)
 {
   memset(data, 0, sizeof(t_data));
-  data->philo_id = malloc(sizeof(pid_t) * data->nbphilos);
-  memset(data->philo_id, 0, sizeof(pid_t) * data->nbphilos);
-  data->nbphilos = atoi(av[1]);
-  data->time_to_die = atoi(av[2]);
-  data->time_to_eat = atoi(av[3]);
-  data->time_to_sleep = atoi(av[4]);
+  data->nbphilos = ft_atoi(av[1]);
+  data->time_to_die = ft_atoi(av[2]);
+  data->time_to_eat = ft_atoi(av[3]);
+  data->time_to_sleep = ft_atoi(av[4]);
   if(ac == 6)
-    data->nb_of_meals = atoi(av[5]);
+    data->nb_of_meals = ft_atoi(av[5]);
   else
     data->nb_of_meals = -1;
 }

@@ -10,5 +10,9 @@ void kill_process(t_data *data)
         kill(data->philo_id[i] , SIGKILL);
         i++;
     }
-    //exit(0);
+    sem_close(data->death);
+    sem_close(data->forks);
+    sem_close(data->print);
+    sem_close(data->full);
+    free(data->philo_id);
 }

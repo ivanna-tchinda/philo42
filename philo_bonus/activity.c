@@ -3,17 +3,10 @@
 
 void eating(t_data *data)
 {
-  //TAKE FORKS 
   sem_wait(data->forks);
-  if(ft_timenow() - data->philo.time_last_meal > data->time_to_die)
-  {
-    sem_post(data->forks);
-    sem_post(data->death);
-    return;
-  }
   sem_wait(data->forks);
 
-  //PRINT
+
   sem_wait(data->print);
   print_action(data, data->philo.id, "has taken a fork 🥄");
   sem_post(data->print);

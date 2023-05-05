@@ -14,7 +14,7 @@ int ft_parse(int ac, char **av)
   while(i < ac)
   {
     j = 0;
-    while(j < (int)strlen(av[i]))
+    while(j < (int)ft_strlen(av[i]))
     {
       if(!(av[i][j] <= 57 && av[i][j] >= 48))
       {
@@ -23,14 +23,14 @@ int ft_parse(int ac, char **av)
       }
       j++;
     }
-    if(strncmp(av[i], "0", 1) == 0 && i != ac - 1)
+    if(ft_strncmp(av[i], "0", 1) == 0 && i != ac - 1)
     {
       printf("Enter only integers superior to 0\n");
       return(1);
     }
     i++;
   }
-  if(strncmp(av[ac - 1], "0", 1) == 0)
+  if(ft_strncmp(av[ac - 1], "0", 1) == 0)
   {
     printf("Philosophers don't need to eat\n");
     return(1);
@@ -49,5 +49,6 @@ int main(int ac, char **av)
   start_routine(&data);
   end_routine(&data);
   destroy_free(&data);
+  exit(0);
   return(0);
 }

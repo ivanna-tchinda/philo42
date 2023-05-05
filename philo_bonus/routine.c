@@ -13,13 +13,9 @@ void *supervisor(void *args)
     i++;
   }
   sem_wait(data->print);
-  sem_close(data->death);
-  sem_close(data->full);
-  sem_close(data->print);
-  sem_close(data->forks);
-  free(data->philo_id);
   printf("All philos have eaten!\n");
-  exit(0);
+  sem_post(data->death);
+  return NULL;
 }
 
 void *death(void *args)
@@ -28,14 +24,16 @@ void *death(void *args)
 
     data = (t_data *)args;
     (void)data;
-    sem_wait(data->death);
-    sem_close(data->death);
-    sem_close(data->full);
-    sem_close(data->print);
-    sem_close(data->forks);
-    free(data->philo_id);
-    //kill_process(data);
-    exit(0);
+    while (1)
+    {
+      if(ft_timenow() - data->philo.time_last_meal > data->time_to_die || data->nbphilos == 1)
+      {
+        sem_wait(data->print);
+        print_action(data, data->philo.id, "died 💀");
+        sem_post(data->death);
+        break;
+      }
+    }
     return(NULL);
 }
 
@@ -45,10 +43,9 @@ void start_routine(t_data *data)
 
   i = 0;
   data->start = ft_timenow();
-  if(pthread_create(&data->death_thread, NULL, &death, data) != 0)
-    return;
-  if(pthread_create(&data->supervisor, NULL, &supervisor, data) != 0)
-    return;
+  pthread_create(&data->supervisor, NULL, &supervisor, data);
+  data->philo_id = malloc(sizeof(pid_t) * data->nbphilos);
+  memset(data->philo_id, 0, sizeof(pid_t) * data->nbphilos);
   while(i < data->nbphilos)
   {
     data->philo.id = i;
@@ -58,31 +55,27 @@ void start_routine(t_data *data)
       printf("process failed\n");
       return;
     }
-    if(data->philo.id % 2 != 0)
-      usleep(2);
     if(data->philo_id[i] == 0)
     {
+      if(data->philo.id % 2 == 0)
+        usleep(3);
       init_philo(data);
       routine_func(data);
     }
     i++;
   }
-  pthread_join(data->death_thread, NULL);
-  pthread_join(data->supervisor, NULL);
+  sem_wait(data->death);
+  return;
 }
 
 void routine_func(t_data *data)
 {
-  //data->start = ft_timenow();
+  data->philo.time_last_meal = ft_timenow();
+  pthread_create(&data->death_thread, NULL, &death, data);
   while(1)
   {
-    if(ft_timenow() - data->philo.time_last_meal > data->time_to_die || data->nbphilos == 1)
-    {
-        sem_wait(data->print);
-        print_action(data, data->philo.id, "died 💀");
-        sem_post(data->death);
-    }
     eating(data);
     sleep_think(data);
   }
+  pthread_join(data->death_thread, NULL);
 }
