@@ -7,6 +7,7 @@ void eating(t_data *data)
   sem_wait(data->forks);
   if(ft_timenow() - data->philo.time_last_meal > data->time_to_die)
   {
+    sem_post(data->forks);
     sem_post(data->death);
     return;
   }

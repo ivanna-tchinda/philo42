@@ -25,6 +25,11 @@ int ft_parse(int ac, char **av)
     }
     i++;
   }
+  if(av[5] && strncmp(av[5] , "0", 1) == 0)
+  {
+    printf("Philos don't need to eat\n");
+    return(1);
+  }
   return(0);
 }
 

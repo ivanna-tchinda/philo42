@@ -13,6 +13,11 @@ void *supervisor(void *args)
     i++;
   }
   sem_wait(data->print);
+  sem_close(data->death);
+  sem_close(data->full);
+  sem_close(data->print);
+  sem_close(data->forks);
+  free(data->philo_id);
   printf("All philos have eaten!\n");
   exit(0);
 }
@@ -22,13 +27,14 @@ void *death(void *args)
     t_data *data;
 
     data = (t_data *)args;
+    (void)data;
     sem_wait(data->death);
     sem_close(data->death);
     sem_close(data->full);
     sem_close(data->print);
     sem_close(data->forks);
     free(data->philo_id);
-    // kill_process(data);
+    //kill_process(data);
     exit(0);
     return(NULL);
 }
@@ -61,10 +67,8 @@ void start_routine(t_data *data)
     }
     i++;
   }
-  // pthread_join(data->death_thread, NULL);
-  // pthread_join(data->supervisor, NULL);
-  pthread_detach(data->death_thread);
-  pthread_detach(data->supervisor);
+  pthread_join(data->death_thread, NULL);
+  pthread_join(data->supervisor, NULL);
 }
 
 void routine_func(t_data *data)

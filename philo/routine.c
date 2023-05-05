@@ -38,7 +38,7 @@ void death_philo(t_philo *philo, int i)
     philo[i].is_dead = 1;
     i++; 
   }
-  exit(0);
+  //exit(0);
 }
 
 void *supervisor(void *args)
