@@ -17,8 +17,12 @@ void kill_process(t_data *data)
     // printf("pid %d, %d %d %d %d\n", getpid(), data->philo_id[0], data->philo_id[1], data->philo_id[2], data->philo_id[3]);
     // sem_post(data->death);
     printf("waiting for death\n");
-    sem_wait(data->death);
-    sem_wait(data->death);
+    while(i < data->nbphilos)
+    {
+        sem_wait(data->death);
+        i++;
+    }
+    i = 0;
     while(i < data->nbphilos)
     {
         kill(data->philo_id[i], SIGKILL);

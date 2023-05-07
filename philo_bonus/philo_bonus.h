@@ -38,6 +38,7 @@ typedef struct s_data{
   int nb_of_meals;
   long int start;
   bool dead;
+  // int dead_philo;
 
   //PROCESS
   pid_t *philo_id;

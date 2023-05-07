@@ -24,18 +24,20 @@ void init_philo(t_data *data)
   data->philo.time_last_meal = ft_timenow();
   pthread_create(&data->philo_thread, NULL, &death, data);
   pthread_detach(data->philo_thread);
+  printf("ok\n");
 }
 
 void init_data(t_data *data, int ac, char **av)
 {
   memset(data, 0, sizeof(t_data));
-  data->philo_id = malloc(sizeof(pid_t) * data->nbphilos);
+  // data->philo_id = malloc(sizeof(pid_t) * data->nbphilos);
   data->dead = false;
   data->full = false;
   data->nbphilos = atoi(av[1]);
   data->time_to_die = atoi(av[2]);
   data->time_to_eat = atoi(av[3]);
   data->time_to_sleep = atoi(av[4]);
+  // data->dead_philo = -1;
   if(ac == 6)
     data->nb_of_meals = ft_atoi(av[5]);
   else

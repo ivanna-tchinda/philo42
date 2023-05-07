@@ -41,6 +41,7 @@ void sleep_think(t_data *data)
     sem_post(data->print);
     return;
   }
+  printf("sleep %d\n", data->dead);
   print_action(data, data->philo.id, "is sleeping 💤");
   sem_post(data->print);
   ft_usleep(data->time_to_sleep);

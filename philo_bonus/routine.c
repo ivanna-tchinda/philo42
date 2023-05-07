@@ -10,17 +10,12 @@ void *supervisor(void *args)
   while(i < data->nbphilos)
   {
     sem_wait(data->full);
+    sem_post(data->death);
     i++;
   }
-  sem_post(data->death);
   sem_wait(data->print);
-  sem_close(data->death);
-  sem_close(data->full);
-  sem_close(data->print);
-  sem_close(data->forks);
-  free(data->philo_id);
   printf("All philos have eaten!\n");
-  exit(0);
+  return NULL;
 }
 
 void *death(void *args)
@@ -33,45 +28,51 @@ void *death(void *args)
     {
       if(ft_timenow() - data->philo.time_last_meal > data->time_to_die)
       {
-        printf("exit death monitor %d\n", data->philo.id);
+        printf("id %d dead\n", data->philo.id);
         sem_post(data->death);
         sem_wait(data->print);
         data->dead = true;
         print_action(data, data->philo.id, "died --------");
+        // sem_post(data->print);
+        // data->dead_philo = data->philo.id;
         break;
       }
     }
-    // exit(0);
+    printf("%d\n", data->dead);
     return(NULL);
 }
 
 void start_routine(t_data *data)
 {
   int i;
-  pid_t *pid_philo;
+  // pid_t *pid_philo;
 
   i = 0;
   data->start = ft_timenow();
-  pid_philo = malloc(sizeof(pid_t) * data->nbphilos);
+  data->philo_id = malloc(sizeof(pid_t) * data->nbphilos);
   while(i < data->nbphilos)
   {
     data->philo.id = i;
-    pid_philo[i] = fork();
-    if(pid_philo[i] == -1)
+    data->philo_id[i] = fork();
+    if(data->philo_id[i] == -1)
     {
       printf("process failed\n");
       return;
     }
-    if(pid_philo[i] == 0)
+    if(data->philo_id[i] == 0)
     {
       init_philo(data);
       routine_func(data);
     }
     i++;
   }
-  data->philo_id = pid_philo;
+  pthread_create(&data->philo_thread, NULL, &supervisor, data);
+  pthread_detach(data->philo_thread);
+  // data->philo_id = pid_philo;
+  sem_wait(data->death);
   // sem_wait(data->death);
   printf("exit main routine %d\n", data->philo.id);
+  sem_post(data->death);
   return;
 }
 
@@ -85,12 +86,9 @@ void *routine_func(void *args)
   while(1)
   {
     eating(data);
-    if(data->dead == true)
-      break;
     sleep_think(data);
-    if(data->dead == true)
-      break;
   }
   printf("exit routine loop%d\n", data->philo.id);
+  sem_post(data->death);
   return(NULL);
 }
