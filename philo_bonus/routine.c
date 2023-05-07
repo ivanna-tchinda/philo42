@@ -12,14 +12,12 @@ void *supervisor(void *args)
     sem_wait(data->full);
     i++;
   }
+  sem_post(data->death);
   sem_wait(data->print);
-  sem_close(data->death);
-  sem_close(data->full);
-  sem_close(data->print);
-  sem_close(data->forks);
-  free(data->philo_id);
+  data->dead = true;
   printf("All philos have eaten!\n");
-  exit(0);
+  // sem_post(data->print);
+  return NULL;
 }
 
 void *death(void *args)
@@ -28,14 +26,24 @@ void *death(void *args)
 
     data = (t_data *)args;
     (void)data;
-    sem_wait(data->death);
-    sem_close(data->death);
-    sem_close(data->full);
-    sem_close(data->print);
-    sem_close(data->forks);
-    free(data->philo_id);
-    //kill_process(data);
-    exit(0);
+    while(1)
+    {
+      if(ft_timenow() - data->philo.time_last_meal > data->time_to_die)
+      {
+        sem_wait(data->print);
+        sem_post(data->death);
+        print_action(data, data->philo.id, "died --------------");
+        // printf("stuck here?\n");
+        data->dead = true;
+        // printf("or here? \n");
+        // sem_post(data->death);
+        // printf("no here \n");
+        // exit(0);
+        printf("exit\n");
+        // sem_post(data->print);
+        return(NULL);
+      }
+    }
     return(NULL);
 }
 
@@ -45,10 +53,7 @@ void start_routine(t_data *data)
 
   i = 0;
   data->start = ft_timenow();
-  if(pthread_create(&data->death_thread, NULL, &death, data) != 0)
-    return;
-  if(pthread_create(&data->supervisor, NULL, &supervisor, data) != 0)
-    return;
+  data->philo_id = malloc(sizeof(pid_t) * data->nbphilos);
   while(i < data->nbphilos)
   {
     data->philo.id = i;
@@ -58,31 +63,38 @@ void start_routine(t_data *data)
       printf("process failed\n");
       return;
     }
-    if(data->philo.id % 2 != 0)
-      usleep(2);
     if(data->philo_id[i] == 0)
     {
       init_philo(data);
+      data->philo.time_last_meal = ft_timenow();
       routine_func(data);
     }
     i++;
   }
-  pthread_join(data->death_thread, NULL);
-  pthread_join(data->supervisor, NULL);
+  pthread_create(&data->death_thread, NULL, &supervisor, data);
+  pthread_detach(data->death_thread);
+  // printf("death\n");
+  sem_wait(data->death);
+  printf("main pid %d\n", getpid());
+  return;
 }
 
-void routine_func(t_data *data)
+void *routine_func(void *args)
 {
-  //data->start = ft_timenow();
-  while(1)
+  t_data *data;
+
+  data = (t_data *)args;
+  data->philo.time_last_meal = ft_timenow();
+  while(data->dead == false)
   {
-    if(ft_timenow() - data->philo.time_last_meal > data->time_to_die || data->nbphilos == 1)
-    {
-        sem_wait(data->print);
-        print_action(data, data->philo.id, "died 💀");
-        sem_post(data->death);
-    }
     eating(data);
+    if(data->dead == true)
+      break;
     sleep_think(data);
+    if(data->dead == true)
+      break;
   }
+  // sem_post(data->death);
+  // printf("id %d exit %d\n", data->philo.id, getpid());
+  return(NULL);
 }

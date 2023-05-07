@@ -15,6 +15,7 @@ void init_semaphores(t_data *data)
 
 void init_philo(t_data *data)
 {
+  pthread_t thread_philo;
   data->philo.time_to_die = data->time_to_die;
   data->philo.time_to_eat = data->time_to_eat;
   data->philo.time_to_sleep = data->time_to_sleep;
@@ -22,13 +23,15 @@ void init_philo(t_data *data)
   data->philo.nbphilos = data->nbphilos;
   data->philo.data = data;
   data->philo.time_last_meal = ft_timenow();
+  data->philo_thread = thread_philo;
+  pthread_create(&thread_philo, NULL, &death, data);
+  pthread_detach(thread_philo);
 }
 
 void init_data(t_data *data, int ac, char **av)
 {
   memset(data, 0, sizeof(t_data));
-  data->philo_id = malloc(sizeof(pid_t) * data->nbphilos);
-  memset(data->philo_id, 0, sizeof(pid_t) * data->nbphilos);
+  data->dead = false;
   data->nbphilos = atoi(av[1]);
   data->time_to_die = atoi(av[2]);
   data->time_to_eat = atoi(av[3]);

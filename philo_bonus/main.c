@@ -39,8 +39,10 @@ int main(int ac, char **av)
     return(1);
   t_data data;
   init_data(&data, ac, av);
+  // init_philo(&data);
   init_semaphores(&data);
   start_routine(&data);
+  // end_threads(&data);
   kill_process(&data);
   exit(0);
   return(0);

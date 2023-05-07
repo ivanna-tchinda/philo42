@@ -5,15 +5,13 @@ void print_action(t_data *data, int id, char *str)
 	printf("%ldms %d %s\n", ft_timenow() - data->start, id, str);
 }
 
-void ft_usleep(int time, long time_of_last_meal, t_data *data)
+void ft_usleep(int time)
 {
   long begin;
 
   begin = ft_timenow();
-  while (ft_timenow() - begin < time && !(ft_timenow() - time_of_last_meal > data->time_to_die))
+  while (ft_timenow() - begin < time )
   	usleep(time / 10);
-  if(ft_timenow() - time_of_last_meal > data->time_to_die)
-    sem_post(data->death);
 }
 
 long int ft_timenow(void)
