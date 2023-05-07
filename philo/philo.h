@@ -9,7 +9,6 @@
 #include <sys/time.h>
 #include <string.h>
 #include <limits.h>
-#include <stdbool.h>
 
 struct s_data;
 
@@ -43,37 +42,36 @@ typedef struct s_data{
   pthread_t *tid;
   pthread_mutex_t print;
   pthread_mutex_t death;
-  bool dead;
-  bool full;
-  int is_full;
-  int belly;
   long long start;
-  pthread_t thread2;
-  
 }              t_data;
 
+//INIT
 void init_philo(t_data *data);
 void init_data(t_data *data, int ac, char **av);
 void init_mutex(t_data *data);
+
+//ROUTINE
 void start_routine(t_data *data);
 void end_routine(t_data *data);
 void *routine_func(void *arg);
 void *supervisor(void *args);
+
+//ACTIONS
 void taking_forks(t_philo *philo);
 void taking_forks2(t_philo *philo);
-void *death_philo(void *args);
 void eating(t_philo *philo);
 void eating_else(t_philo *philo);
 void release_forks(t_philo *philo);
 void release_forks_else(t_philo *philo);
 void sleeping(t_philo *philo);
 void thinking(t_philo *philo);
+
+//UTILS
 void print_action(t_data *data, int id, char *str);
-void ft_usleep(int time, t_data *data);
+void ft_usleep(int time, t_philo *philo);
 long int ft_timenow(void);
 int check_nb_meals(t_philo *philo);
-int	ft_atoi(const char *nptr);
-int	ft_strncmp(const char *s1, const char *s2, size_t n);
-size_t	ft_strlen(const char *s);
+
+//FREE
 void destroy_free(t_data *data);
 #endif
