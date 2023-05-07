@@ -28,54 +28,60 @@ void *death(void *args)
     t_data *data;
 
     data = (t_data *)args;
-    (void)data;
-    sem_wait(data->death);
-    sem_close(data->death);
-    sem_close(data->full);
-    sem_close(data->print);
-    sem_close(data->forks);
-    free(data->philo_id);
-    //kill_process(data);
-    exit(0);
+    data->philo.time_last_meal = ft_timenow();
+    while(1)
+    {
+      if(ft_timenow() - data->philo.time_last_meal > data->time_to_die)
+      {
+        printf("exit death monitor %d\n", data->philo.id);
+        sem_post(data->death);
+        sem_wait(data->print);
+        data->dead = true;
+        print_action(data, data->philo.id, "died --------");
+        break;
+      }
+    }
+    // exit(0);
     return(NULL);
 }
 
 void start_routine(t_data *data)
 {
   int i;
+  pid_t *pid_philo;
 
   i = 0;
   data->start = ft_timenow();
-  if(pthread_create(&data->death_thread, NULL, &death, data) != 0)
-    return;
-  if(pthread_create(&data->supervisor, NULL, &supervisor, data) != 0)
-    return;
+  pid_philo = malloc(sizeof(pid_t) * data->nbphilos);
   while(i < data->nbphilos)
   {
     data->philo.id = i;
-    data->philo_id[i] = fork();
-    if(data->philo_id[i] == -1)
+    pid_philo[i] = fork();
+    if(pid_philo[i] == -1)
     {
       printf("process failed\n");
       return;
     }
-    if(data->philo_id[i] == 0)
+    if(pid_philo[i] == 0)
     {
-      if(data->philo.id % 2 == 0)
-        usleep(3);
       init_philo(data);
-      data->philo.time_last_meal = ft_timenow();
       routine_func(data);
     }
     i++;
   }
-  pthread_join(data->death_thread, NULL);
-  pthread_join(data->supervisor, NULL);
+  data->philo_id = pid_philo;
+  // sem_wait(data->death);
+  printf("exit main routine %d\n", data->philo.id);
+  return;
 }
 
 void *routine_func(void *args)
 {
+  t_data *data;
+
+  data = (t_data *)args;
   //data->start = ft_timenow();
+  data->philo.time_last_meal = ft_timenow();
   while(1)
   {
     eating(data);
@@ -85,4 +91,6 @@ void *routine_func(void *args)
     if(data->dead == true)
       break;
   }
+  printf("exit routine loop%d\n", data->philo.id);
+  return(NULL);
 }

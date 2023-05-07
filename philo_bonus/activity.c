@@ -7,12 +7,6 @@ void eating(t_data *data)
   sem_wait(data->forks);
 
   //PRINT
-  if(data->dead == true)
-  {
-    sem_post(data->forks);
-    sem_post(data->forks);
-    return;
-  }
   sem_wait(data->print);
   if(data->dead == true)
   {
@@ -34,7 +28,7 @@ void eating(t_data *data)
   if(data->philo.nb_of_meals == data->nb_of_meals)
     sem_post(data->full);
   ft_usleep(data->time_to_eat);
-    
+  // printf("%d\n", data->dead);
   sem_post(data->forks);
   sem_post(data->forks);
 }
