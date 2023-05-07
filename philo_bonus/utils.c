@@ -5,12 +5,12 @@ void print_action(t_data *data, int id, char *str)
 	printf("%ldms %d %s\n", ft_timenow() - data->start, id, str);
 }
 
-void ft_usleep(int time)
+void ft_usleep(int time, t_data *data)
 {
   long begin;
 
   begin = ft_timenow();
-  while (ft_timenow() - begin < time )
+  while (ft_timenow() - begin < time && data->dead == 0)
   	usleep(time / 10);
 }
 

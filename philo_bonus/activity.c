@@ -5,8 +5,6 @@ void eating(t_data *data)
 {
   sem_wait(data->forks);
   sem_wait(data->forks);
-
-  //PRINT
   sem_wait(data->print);
   if(data->dead == true)
   {
@@ -27,8 +25,7 @@ void eating(t_data *data)
   data->philo.nb_of_meals += 1;
   if(data->philo.nb_of_meals == data->nb_of_meals)
     sem_post(data->full);
-  ft_usleep(data->time_to_eat);
-  // printf("%d\n", data->dead);
+  ft_usleep(data->time_to_eat, data);
   sem_post(data->forks);
   sem_post(data->forks);
 }
@@ -41,10 +38,9 @@ void sleep_think(t_data *data)
     sem_post(data->print);
     return;
   }
-  printf("sleep %d\n", data->dead);
   print_action(data, data->philo.id, "is sleeping 💤");
   sem_post(data->print);
-  ft_usleep(data->time_to_sleep);
+  ft_usleep(data->time_to_sleep, data);
   sem_wait(data->print);
   print_action(data, data->philo.id, "is thinking 🧠");
   sem_post(data->print);

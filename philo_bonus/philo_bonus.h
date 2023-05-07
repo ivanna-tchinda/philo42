@@ -76,7 +76,7 @@ void eating(t_data *data);
 void sleep_think(t_data *data);
 long int ft_timenow(void);
 int	ft_atoi(const char *nptr);
-void ft_usleep(int time);
+void ft_usleep(int time, t_data *data);
 void print_action(t_data *data, int id, char *str);
 
 #endif

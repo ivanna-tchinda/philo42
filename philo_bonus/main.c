@@ -6,11 +6,6 @@ int ft_parse(int ac, char **av)
   int j;
 
   i = 1;
-  if (ac < 5 || ac > 6)
-  {
-    printf("Enter 5 or 6 digits\n");
-    return(1);
-  }
   while(i < ac)
   {
     j = 0;
@@ -30,16 +25,21 @@ int ft_parse(int ac, char **av)
     }
     i++;
   }
-  if(ft_strncmp(av[ac - 1], "0", 1) == 0)
-  {
-    printf("Philosophers don't need to eat\n");
-    return(1);
-  }
   return(0);
 }
 
 int main(int ac, char **av)
 {
+  if (ac < 5 || ac > 6)
+  {
+    printf("Enter 5 or 6 digits\n");
+    return(1);
+  }
+  if(ft_strncmp(av[ac - 1], "0", 1) == 0)
+  {
+    printf("Philosophers don't need to eat\n");
+    return(1);
+  }
   if(ft_parse(ac, av) == 1)
     return(1);
   t_data data;
@@ -48,5 +48,6 @@ int main(int ac, char **av)
   start_routine(&data);
   kill_process(&data);
   free_data(&data);
+  // exit(0);
   return(0);
 }
