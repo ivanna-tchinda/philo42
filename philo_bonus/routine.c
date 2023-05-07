@@ -6,8 +6,13 @@ void *supervisor(void *args)
   int i;
 
   data = (t_data *)args;
+  if(data->nb_of_meals < 1 || data->dead == true)
+  {
+    printf("dead\n");
+    return NULL;
+  }
   i = -1;
-  while(i < data->nbphilos)
+  while(++i < data->nbphilos)
     sem_wait(data->full);
   i = -1;
   while(++i < data->nbphilos)
@@ -57,11 +62,15 @@ void start_routine(t_data *data)
     }
     if(data->philo_id[i] == 0)
     {
+      // if(data->philo.id % 2 != 0)
+      //   ft_usleep(20, data);
       init_philo(data);
       routine_func(data);
     }
     i++;
   }
+  if(data->nbphilos == 1)
+    sem_wait(data->death);
   sem_post(data->death);
   return;
 }

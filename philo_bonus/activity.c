@@ -4,8 +4,10 @@
 void eating(t_data *data)
 {
   sem_wait(data->forks);
-  sem_wait(data->forks);
   sem_wait(data->print);
+  print_action(data, data->philo.id, "has taken a fork 🥄");
+  sem_post(data->print);
+  sem_wait(data->forks);
   if(data->dead == true)
   {
     sem_post(data->forks);
@@ -13,8 +15,6 @@ void eating(t_data *data)
     sem_post(data->print);
     return;
   }
-  print_action(data, data->philo.id, "has taken a fork 🥄");
-  sem_post(data->print);
   sem_wait(data->print);
   print_action(data, data->philo.id, "has taken a fork 🥄");
   sem_post(data->print);

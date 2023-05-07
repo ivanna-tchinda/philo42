@@ -4,6 +4,8 @@ void init_mutex(t_data *data)
 {
   int i;
   pthread_mutex_t *mutex;
+  
+  
   i = 0;
   mutex = malloc(sizeof(pthread_mutex_t) * data->nbphilos);
   while(i < data->nbphilos)
@@ -23,6 +25,9 @@ void init_philo(t_data *data)
   int i;
 
   philo = malloc(sizeof(t_philo) * data->nbphilos);
+  if(!philo)
+    return;
+  memset(philo, 0, data->nbphilos);
   i = 0;
   while (i < data->nbphilos)
   {
@@ -30,7 +35,7 @@ void init_philo(t_data *data)
     philo[i].time_to_die = data->time_to_die;
     philo[i].time_to_eat = data->time_to_eat;
     philo[i].time_to_sleep = data->time_to_sleep;
-    philo[i].nb_of_meals = data->nb_of_meals;
+    philo[i].nb_of_meals = 0;
     philo[i].left_fork = i;
     philo[i].right_fork = (i + 1) % data->nbphilos;
     philo[i].nbphilos = data->nbphilos;
@@ -50,7 +55,11 @@ void init_data(t_data *data, int ac, char **av)
   data->time_to_sleep = atoi(av[4]);
   data->is_dead = 0;
   if(ac == 6)
-    data->nb_of_meals = atoi(av[5]);
+    data->nb_of_meals = ft_atoi(av[5]);
   else
-    data->nb_of_meals = ULONG_MAX;
+    data->nb_of_meals = -1;
+  data->is_full = data->nb_of_meals * data->nbphilos;
+  data->belly = 0;
+  data->dead = false;
+  data->full = false;
 }

@@ -14,16 +14,27 @@ int ft_parse(int ac, char **av)
   while(i < ac)
   {
     j = 0;
-    while(j < (int)strlen(av[i]))
+    while(j < (int)ft_strlen(av[i]))
+    while(j < (int)ft_strlen(av[i]))
     {
       if(!(av[i][j] <= 57 && av[i][j] >= 48))
       {
-        printf("Enter 5 or 6 digits\n");
+        printf("Enter 5 or 6 digits superior to 0\n");
         return(1);
       }
       j++;
     }
+    if(ft_strncmp(av[i], "0", 1) == 0 && i != ac - 1)
+    {
+      printf("Enter only integers superior to 0\n");
+      return(1);
+    }
     i++;
+  }
+  if(ft_strncmp(av[ac - 1], "0", 1) == 0)
+  {
+    printf("Philosophers don't need to eat\n");
+    return(1);
   }
   return(0);
 }
@@ -31,7 +42,7 @@ int ft_parse(int ac, char **av)
 int main(int ac, char **av)
 {
   if(ft_parse(ac, av) == 1)
-    return(1);
+    return(0);
   t_data data;
   init_data(&data, ac, av);
   init_mutex(&data);
