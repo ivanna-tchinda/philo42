@@ -3,7 +3,6 @@
 
 void eating(t_data *data)
 {
-  //TAKE FORKS 
   sem_wait(data->forks);
   sem_wait(data->forks);
 

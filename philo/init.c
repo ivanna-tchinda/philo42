@@ -5,6 +5,7 @@ void init_mutex(t_data *data)
   int i;
   pthread_mutex_t *mutex;
   
+  
   i = 0;
   mutex = malloc(sizeof(pthread_mutex_t) * data->nbphilos);
   while(i < data->nbphilos)
@@ -48,13 +49,10 @@ void init_philo(t_data *data)
 
 void init_data(t_data *data, int ac, char **av)
 {
-  data->nbphilos = ft_atoi(av[1]);
-  data->time_to_die = ft_atoi(av[2]);
-  data->time_to_eat = ft_atoi(av[3]);
-  data->time_to_sleep = ft_atoi(av[4]);
-  data->dead = false;
-  data->full = false;
-  data->belly = 0;
+  data->nbphilos = atoi(av[1]);
+  data->time_to_die = atoi(av[2]);
+  data->time_to_eat = atoi(av[3]);
+  data->time_to_sleep = atoi(av[4]);
   data->is_dead = 0;
   if(ac == 6)
     data->nb_of_meals = ft_atoi(av[5]);

@@ -37,7 +37,7 @@ void init_data(t_data *data, int ac, char **av)
   data->time_to_eat = atoi(av[3]);
   data->time_to_sleep = atoi(av[4]);
   if(ac == 6)
-    data->nb_of_meals = atoi(av[5]);
+    data->nb_of_meals = ft_atoi(av[5]);
   else
     data->nb_of_meals = -1;
 }

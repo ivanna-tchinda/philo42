@@ -23,9 +23,17 @@ void kill_process(t_data *data)
         printf("kill\n");
         i++;
     }
+<<<<<<< HEAD
     free_data(data);
     // i = 0;
     // while(i < data->nbphilos)
     // sem_wait(data->death);
     return;
+=======
+    sem_close(data->death);
+    sem_close(data->forks);
+    sem_close(data->print);
+    sem_close(data->full);
+    free(data->philo_id);
+>>>>>>> ee0dc411f70c95adedb6f1a9f336ec6b534131e2
 }

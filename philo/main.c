@@ -15,6 +15,7 @@ int ft_parse(int ac, char **av)
   {
     j = 0;
     while(j < (int)ft_strlen(av[i]))
+    while(j < (int)ft_strlen(av[i]))
     {
       if(!(av[i][j] <= 57 && av[i][j] >= 48))
       {
@@ -49,7 +50,5 @@ int main(int ac, char **av)
   start_routine(&data);
   end_routine(&data);
   destroy_free(&data);
-  exit(0);
-  // usleep(INT_MAX);
   return(0);
 }
