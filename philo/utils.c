@@ -1,48 +1,39 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: itchinda <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/08 12:48:18 by itchinda          #+#    #+#             */
+/*   Updated: 2023/05/08 12:50:06 by itchinda         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-int check_nb_meals(t_philo *philo)
-{
-  int i;
-  t_data *data;
-
-  data = philo->data;
-  i = 0;
-  while(i < philo->nbphilos)
-  {
-    if(philo[i].nb_of_meals > 0)
-    {
-      return 0;
-    }
-    i++;
-  } 
-  pthread_mutex_lock(&data->print);
-  data->dead = true;
-  printf("All philos have eaten 🥳\n");
-  pthread_mutex_unlock(&data->print);
-  //exit(0);
-  return(1);
-}
-
-void print_action(t_data *data, int id, char *str)
+void	print_action(t_data *data, int id, char *str)
 {
 	printf("%lldms %d %s\n", ft_timenow() - data->start, id, str);
 }
 
-void ft_usleep(int time, t_data *data)
+void	ft_usleep(int time, t_data *data)
 {
-  long begin;
+	long	begin;
 
-  begin = ft_timenow();
-  while (ft_timenow() - begin < time && data->dead == false && data->full == false)
-  	usleep(time / 10);
+	begin = ft_timenow();
+	while (ft_timenow() - begin < time
+		&& data->dead == false && data->full == false)
+		usleep(time / 10);
 }
 
-long int ft_timenow(void)
+long int	ft_timenow(void)
 {
-  struct timeval current_time;
+	struct timeval	current_time;
 
-  gettimeofday(&current_time, NULL);
-  return ((size_t)current_time.tv_sec * 1000 +(size_t)current_time.tv_usec / 1000);
+	gettimeofday(&current_time, NULL);
+	return ((size_t)current_time.tv_sec * 1000
+		+ (size_t)current_time.tv_usec / 1000);
 }
 
 void	free_tab(char **tab)
@@ -85,27 +76,4 @@ int	ft_atoi(const char *nptr)
 		i++;
 	}
 	return (value * sign);
-}
-
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
-{
-	while (*s1 && *s2 && n > 0 && *s1 == *s2)
-	{
-		s1++;
-		s2++;
-		n--;
-	}
-	if (n == 0)
-		return (0);
-	return (*(unsigned char *)s1 - *(unsigned char *)s2);
-}
-
-size_t	ft_strlen(const char *s)
-{
-	size_t	i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
 }
