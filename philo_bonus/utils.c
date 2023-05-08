@@ -1,25 +1,38 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: itchinda <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/08 13:06:42 by itchinda          #+#    #+#             */
+/*   Updated: 2023/05/08 13:08:34 by itchinda         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo_bonus.h"
 
-void print_action(t_data *data, int id, char *str)
+void	print_action(t_data *data, int id, char *str)
 {
 	printf("%ldms %d %s\n", ft_timenow() - data->start, id, str);
 }
 
-void ft_usleep(int time, t_data *data)
+void	ft_usleep(int time)
 {
-  long begin;
+	long	begin;
 
-  begin = ft_timenow();
-  while (ft_timenow() - begin < time && data->dead == 0)
-  	usleep(time / 10);
+	begin = ft_timenow();
+	while (ft_timenow() - begin < time)
+		usleep(time / 10);
 }
 
-long int ft_timenow(void)
+long int	ft_timenow(void)
 {
-  struct timeval current_time;
+	struct timeval	current_time;
 
-  gettimeofday(&current_time, NULL);
-  return ((size_t)current_time.tv_sec * 1000 +(size_t)current_time.tv_usec / 1000);
+	gettimeofday(&current_time, NULL);
+	return ((size_t)current_time.tv_sec * 1000
+		+ (size_t)current_time.tv_usec / 1000);
 }
 
 int	ft_atoi(const char *nptr)
@@ -62,14 +75,4 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	if (n == 0)
 		return (0);
 	return (*(unsigned char *)s1 - *(unsigned char *)s2);
-}
-
-size_t	ft_strlen(const char *s)
-{
-	size_t	i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
 }
